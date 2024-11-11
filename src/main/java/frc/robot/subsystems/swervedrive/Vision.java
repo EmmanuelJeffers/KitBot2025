@@ -50,8 +50,7 @@ public class Vision
   /**
    * April Tag Field Layout of the year.
    */
-  public static final AprilTagFieldLayout fieldLayout                     = AprilTagFieldLayout.loadField(
-      AprilTagFields.k2024Crescendo);
+  public static final AprilTagFieldLayout fieldLayout                     = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   /**
    * Photon Vision Simulation
    */
