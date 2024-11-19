@@ -48,12 +48,12 @@ public class RobotContainer
                                                                                                OperatorConstants.LEFT_Y_DEADBAND),
                                                                  () -> -MathUtil.applyDeadband(driver.getLeftX(),
                                                                                                OperatorConstants.LEFT_X_DEADBAND),
-                                                                 () -> -MathUtil.applyDeadband(driver.getRightX(),
+                                                                 () -> MathUtil.applyDeadband(driver.getRightX(),
                                                                                                OperatorConstants.RIGHT_X_DEADBAND),
-                                                                 driver.getHID()::getTriangleButtonPressed,
                                                                  driver.getHID()::getCrossButtonPressed,
-                                                                 driver.getHID()::getSquareButtonPressed,
-                                                                 driver.getHID()::getCircleButtonPressed);
+                                                                 driver.getHID()::getTriangleButtonPressed,
+                                                                 driver.getHID()::getCircleButtonPressed,
+                                                                 driver.getHID()::getSquareButtonPressed);
 
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
@@ -124,7 +124,7 @@ public class RobotContainer
       driver.L1().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driver.R1().onTrue(Commands.none());
       drivebase.setDefaultCommand(
-          !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+          !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : closedAbsoluteDriveAdv);
     }
   }
 
@@ -136,7 +136,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return drivebase.getAutonomousCommand("Test Auto");
   }
 
   public void setDriveMode()
