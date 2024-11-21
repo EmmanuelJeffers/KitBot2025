@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -88,6 +89,7 @@ public class RobotContainer
   {
     // Configure the trigger bindings
     configureBindings();
+    addCommandsToDashboard();
   }
 
   /**
@@ -112,20 +114,28 @@ public class RobotContainer
           !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
     } else
     {
-      driver.cross().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driver.square().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driver.circle().whileTrue(
-          Commands.deferredProxy(() -> drivebase.driveToPose(
-                                     new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                                ));
-      driver.triangle().whileTrue(drivebase.aimAtSpeaker(2));
-      driver.options().whileTrue(Commands.none());
-      driver.create().whileTrue(Commands.none());
+      driver.cross().onTrue(Commands.none());
+      driver.square().onTrue(Commands.none());
+      driver.circle().whileTrue(Commands.none());
+      driver.triangle().whileTrue(Commands.none());
+      driver.L2().whileTrue(drivebase.aimAtSpeaker(2));
+      driver.options().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      driver.create().whileTrue((Commands.runOnce(drivebase::zeroGyro)));
       driver.L1().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driver.R1().onTrue(Commands.none());
+      driver.R1().onTrue(Commands.deferredProxy(() -> drivebase.driveToPose(
+        new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))));
       drivebase.setDefaultCommand(
           !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : closedAbsoluteDriveAdv);
     }
+  }
+
+  public void addCommandsToDashboard() {
+    SmartDashboard.putData("Aim at Speaker", drivebase.aimAtSpeaker(2));
+    SmartDashboard.putData("Zero Gyro", Commands.runOnce(drivebase::zeroGyro));
+    SmartDashboard.putData("Lock Wheels", Commands.runOnce(drivebase::lock));
+    SmartDashboard.putData("Drive Home", Commands.deferredProxy(() -> drivebase.driveToPose(
+      new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))));
+    SmartDashboard.putData("", closedAbsoluteDriveAdv);
   }
 
   /**
