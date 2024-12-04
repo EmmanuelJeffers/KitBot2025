@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
+
 
   public Robot()
   {
@@ -59,6 +61,7 @@ public class Robot extends TimedRobot
 
     // Record both DS control and joystick data
     DriverStation.startDataLog(DataLogManager.getLog());
+    CameraServer.addCamera(CameraServer.startAutomaticCapture(0));
   }
 
   /**
@@ -76,6 +79,7 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    
   }
 
   /**
