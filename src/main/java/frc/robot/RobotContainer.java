@@ -39,6 +39,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
+                                                                         
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
@@ -46,10 +47,13 @@ public class RobotContainer
   // right stick controls the rotational velocity 
   // buttons are quick rotation positions to different ways to face
   // WARNING: default buttons are on the same buttons as the ones defined in configureBindings
+  
   AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                 () -> -MathUtil.applyDeadband(driver.getLeftY(),
+                                                                 () -> drivebase.isRed() ? MathUtil.applyDeadband(driver.getLeftY(),
+                                                                                               OperatorConstants.LEFT_Y_DEADBAND):-MathUtil.applyDeadband(driver.getLeftY(),
                                                                                                OperatorConstants.LEFT_Y_DEADBAND),
-                                                                 () -> -MathUtil.applyDeadband(driver.getLeftX(),
+                                                                 () -> drivebase.isRed() ? MathUtil.applyDeadband(driver.getLeftX(),
+                                                                                               OperatorConstants.LEFT_X_DEADBAND) : -MathUtil.applyDeadband(driver.getLeftX(),
                                                                                                OperatorConstants.LEFT_X_DEADBAND),
                                                                  () -> MathUtil.applyDeadband(driver.getRightX(),
                                                                                                OperatorConstants.RIGHT_X_DEADBAND),

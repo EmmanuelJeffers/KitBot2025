@@ -186,6 +186,10 @@ public class SwerveSubsystem extends SubsystemBase
         this // Reference to this subsystem to set requirements
                                   );
   }
+  public boolean isRed(){
+    var alliance = DriverStation.getAlliance();
+          return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+  }
 
   /**
    * Get the distance to the speaker.
