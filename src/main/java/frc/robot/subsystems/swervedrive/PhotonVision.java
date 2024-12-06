@@ -7,10 +7,15 @@ package frc.robot.subsystems.swervedrive;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import edu.wpi.first.math.geometry.Transform3d;
 
-/** Add your docs here. */
-public class PhotonVision {
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+
+public class PhotonVision extends SubsystemBase {
+  /** Creates a new PhotonVision. */
+  
     PhotonCamera limelight;
     private boolean hasTarget;
     PhotonTrackedTarget target;
@@ -21,8 +26,6 @@ public class PhotonVision {
         target = result.getBestTarget();
         double yaw = target.getYaw();
         double pitch = target.getPitch();
-        double area = target.getArea();
-        double skew = target.getSkew();
         Transform3d pose = target.getAlternateCameraToTarget();
     }
      
@@ -35,5 +38,13 @@ public class PhotonVision {
     }
 
     
-}
 
+
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("hasTarget", hasTarget());
+
+  }
+}
