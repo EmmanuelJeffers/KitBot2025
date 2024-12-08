@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems.swervedrive;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -19,12 +23,12 @@ public class PhotonVision extends SubsystemBase {
     PhotonCamera limelight;
     private boolean hasTarget;
     PhotonTrackedTarget target;
+    ArrayList<Double> pose;
     public PhotonVision(){
        limelight = new PhotonCamera("limelight2");
        var result = limelight.getLatestResult();
         hasTarget = result.hasTargets();
         target = result.getBestTarget();
-        double yaw = target.getYaw();
         double pitch = target.getPitch();
         Transform3d pose = target.getAlternateCameraToTarget();
     }
@@ -36,6 +40,9 @@ public class PhotonVision extends SubsystemBase {
     public boolean hasTarget(){
         return hasTarget;
     }
+    public double getYaw(){
+      return target.getYaw();
+    }
 
     
 
@@ -45,6 +52,8 @@ public class PhotonVision extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("hasTarget", hasTarget());
+    SmartDashboard.putNumber("VisionYaw",getYaw());
+    
 
   }
 }
